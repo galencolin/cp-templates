@@ -1,0 +1,179 @@
+564 (https://codeforces.com/contest/1173) - problems are often easier than they seem (D)
+
+565 (https://codeforces.com/contest/1176) - problems are often easier than they seem (E)
+
+567 (https://codeforces.com/contest/1181) - pbds exists, use it (D)
+
+568 (https://codeforces.com/contest/1185) - {
+	no clue what went wrong (D)
+	consider all the constraints, including the possible values in the array (C2)
+}
+
+569 (https://codeforces.com/contest/1180) - {
+	think about how i can use the changes you make to the state (B)
+	segment tree was broken, it's now fixed i hope (C)
+}
+
+571 (https://codeforces.com/contest/1186) - {
+	parity matters (C)
+	think through use of structures before implementing (F)
+}
+
+E67 (https://codeforces.com/contest/1187) - {
+	in ICPC-style contests, jumping ahead is bad (C, D)
+	proper set iteration with deletions: 
+		https://stackoverflow.com/questions/2874441/deleting-elements-from-stl-set-while-iterating (C)
+	sometimes i'm just right (D)
+}
+
+572 (https://codeforces.com/contest/1189) - {
+	problems are often easier than they seem (for speed) (C)
+	consider modifying equations to isolate individual elements (E)
+}
+
+573 (https://codeforces.com/contest/1190) - {
+	casework sucks (B)
+	often problems are things i know (F)
+}
+
+E68 (https://codeforces.com/contest/1191) - {
+	use naive to see patterns in the answer (D)
+}	
+
+527 (https://codeforces.com/contest/1061) - {
+	be careful with sqrt, remove unique elements if necessary (C)
+}
+
+global 4 (https://codeforces.com/contest/1178) (
+	think about what's possible and how things affect each other (C)
+	plan it out (D)
+	all constraints exist for a reason (E)
+}
+
+E69 (https://codeforces.com/contest/1197) - {
+	give greedy sols more thought, especially with a hacking phase (D)
+	plan it out, this was terrible (E)
+}
+
+576 (https://codeforces.com/contest/1199) - {
+	remember i/o you idiot (C)
+	go fast (D)
+	consider edge cases, for example, 2 types of queries and none of a type (D)
+	sometimes i'm just right (F)
+	problems are often easier than they seem (E, F)
+}
+
+577 (https://codeforces.com/contest/1201) - {
+	as a legend once put it: check the limits, dummy (C)
+	goddammit (D)
+}
+
+E70 (https://codeforces.com/contest/1202) - {
+	for christ's sake never consider quitting mid-contest (A)
+	implement better, think it through before (B)
+}
+
+578 (https://codeforces.com/contest/1200) - {
+	if you get stuck, just switch (D, E)
+	trust the setters (D, E)
+}
+
+580 (https://codeforces.com/contest/1206) - {
+	read the problem you idiot (C)
+	trust the setters (D, E)
+	consider how big the input can really be (D)
+}
+
+581 (https://codeforces.com/contest/1204) - {
+	trust yourself (C)
+	think about what you actually need to do for the problem (C)
+	you don't have to solve both the easy and hard versions at the same time (D1, D2)
+}
+
+E71 (https://codeforces.com/contest/1207) - {
+	read the problem (C)
+	read the mod (D)
+	when have dumb solutions ever worked (E)
+	sqrt exists (F)
+}
+
+manthan (https://codeforces.com/contest/1208) - {
+	pattern problems are usually simple, especially if they're early (C)
+	xors cancel each other out (C)
+	think about pointer dp (F)
+}
+
+584 (https://codeforces.com/contest/1209) - {
+	read the problem (C)
+	think about what your algorithm is and if it can be simplified (D)
+	consider edge cases like star graphs and linked lists (D)
+	trust your instincts (E2)
+}
+
+585 (https://codeforces.com/contest/1215) - {
+	if the question asks about the difference, think about how the difference changes per problem (D)
+	try not to overcomplicate (D)
+	you know when constraints are small, it's usually bitmask DP (E)
+}
+
+589 (https://codeforces.com/contest/1228) - {
+	revisit edge cases before submitting (D)
+	DP with 250^4 states is clearly not possible (E)
+	think about different things to count - why would it be necessary to count the number of ways for each number of 1's? (E)
+}
+
+596 (https://codeforces.com/contest/1246) - {
+	what the hell happened (B)
+	make a number theory template (B)
+	grind out implementation, you're good at that now (C)
+}
+
+600 (https://codeforces.com/contest/1253) - {
+	try weird cases with big numbers before submitting (D)
+	think about what you've forgotten, list out the things you need to do (E)
+}
+
+603 (https://codeforces.com/contest/1263) - {
+	think about what you're doing before submitting - querying the maximum when you want to ask if the minimum < 0 clearly won't work (E)
+	be more careful with flows (F)
+}
+
+GB2019 (https://codeforces.com/contest/1270) - {
+	what (C)
+	focus (D)
+	try other things (D)
+	think about big brain solutions, especially for open-ended constructive problems (E)
+}
+
+612 (https://codeforces.com/contest/1286) - {
+	think (A)
+	be focused, speed is huge (A, B)
+	don't try to solve both subtasks at once (C)
+}
+
+614 (https://codeforces.com/contest/1292) - {
+	think (C)
+	focus (D)
+}
+
+616 (https://codeforces.com/contest/1290) - {
+	think (A, B)
+	try other samples (B)
+	focus (C)
+	work out math before writing code (A, C)
+}
+
+618 (https://codeforces.com/contest/1299) - {
+	fuck (C)
+	consult the strat list (C)
+}
+
+620 (https://codeforces.com/contest/1304) - {
+	no comments. this went well :)
+}
+
+623 (https://codeforces.com/contest/1314) - {
+	stop stressing about time (A)
+	THINK (B)
+	go with your gut (D, on multiple occasions)
+}

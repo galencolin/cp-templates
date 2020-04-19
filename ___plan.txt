@@ -1,0 +1,13 @@
+segment tree, sum_t, max_t [DONE]
+dsu [DONE]
+trie, arrtoint, inttoarr [DONE]
+qradix [DONE, bad]
+
+dijkstra
+prim
+kruskal [should be easy with dsu] do this next
+maxflow
+eulerian [maybe]
+actual bignum
+actual convex hull
+ez prefix sum stuff

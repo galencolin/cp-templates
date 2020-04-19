@@ -1,0 +1,88 @@
+READ THE PROBLEM STATEMENT
+use the right mod please
+
+debugging:
+	***overflow
+	******on query problems, are you resetting the state?
+	set/std tle
+	set things to zero before doing things with them
+	is the modulo right
+	is division by zero a problem? (https://codeforces.com/problemset/problem/543/D)
+	maps create keys that don't exist. fucking learn this.
+	for loops re-evaluate stop condition (and the values)
+	when initializing a segment tree with preorder, manually update (don't call st.init, as it will be out of order)
+general:
+	segment trees
+	binary search
+	just brute force
+	***think about pigeonhole (it's useful)
+	all constraints exist for a reason
+	use count array if values are small
+	***if math, try messing with the equation a bit
+		move all of one variable to one side and the other to the other side
+	dp
+	***try counting the complement
+	try processing queries in reverse or by specific order
+	contribution to the sum
+	sqrt decomposition
+	sqrt buffering
+	examine the bounds on unique values or actual operations done - sometimes this can be sqrt or something
+	use difference arrays - those are amazing
+	convex hull (you never know)
+	custom segment trees - like high card low card, optimal milking
+	reduce to flows
+	use 1/-1 balancing
+	try to get rid of absolute values (slingshots)
+	***two pointers
+	consider the prefix sum/partial sum
+	think about a process in reverse
+	monotonicity
+	***divide and conquer
+	stack/queue
+	trie (xor stuff)
+graphs:
+	dfs/bfs (use bfs over dfs)
+	tree coloring
+	shortest path
+	spanning trees
+	dsu - especially with reverse order stuff
+	flows
+	think of some problems as graphs
+	dfs tree
+	***THINK about spanning trees
+	centroid or heavy-light decomposition
+	preorder traversal
+	dfs order
+	dsu on trees
+	small to large
+	centroid decomposition
+	flattening to an array magic
+query problems:
+	segment trees (++implicit)
+	***sqrt decomposition (for more than just range)
+	range tree - you know how to do these now
+	mergesort tree - ordered_set in segtree or fenwick
+	process the queries in chunks, whatever's easiest to bunch up together (slingshots)
+	find the left or right for when this value will NOT be counted, then use a mergesort tree (like that 2700)
+	ioi wall trick - for combinable queries, sweep right and use a segment tree
+bitmasks:
+	try boolean algebra (google codeforces)
+	for optimization, go bit-by-bit, top-down
+dp:
+	divide and conquer
+	convex hull
+	if the value can only change by 1, apply some optimization (redistricting)
+	segtree dp
+	exchange arguments?
+	whatever the hell mowing mischief does - blocking?
+	pointer dp - like 262144
+	how many states do we actually care about
+strings:
+	fuck
+	hashing (be careful with TL)
+	eventually figure out suffix trees
+geometry:
+	lots of triangles trick (break a triangle into segments, reduce to n^d + n^3
+number theory:
+	bitset or segmented sieve
+	goldbach conjecture
