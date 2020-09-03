@@ -9,7 +9,7 @@ struct max_t {
     return max_t(max(val, other.val));
   }
   
-  max_t lazy_op(max_t v, int size) {
+  max_t lazy_op(max_t& v, int size) {
     return max_t(val + v.val);
   }
 };

@@ -1,19 +1,18 @@
+/* note: additional optimization - first take everything modulo mod^2, using if (x >= mod^2) x -= mod^2, then take everything modulo mod at the end */
+template<int n>
 struct matrix {
   using TYPE = ll;
-  int n;
-  vector<vector<TYPE>> v;
+  TYPE v[n][n];
 
-  void init(int s) {
-    n = s;
-    v = vector<vector<TYPE> >(n, vector<TYPE>(n, 0));
+  matrix() {
+    memset(v, 0, sizeof(v));
   }
 
-  matrix mul(matrix &b) {
-    matrix res;
-    res.init(n);
+  matrix<n> mul(matrix &b) {
+    matrix<n> res;
     for (int i = 0; i < n; i++) {
-      for (int j = 0; j < n; j++) {
-        for (int k = 0; k < n; k++) {
+      for (int k = 0; k < n; k++) {
+        for (int j = 0; j < n; j++) {
           res.v[i][j] = (res.v[i][j] + v[i][k] * b.v[k][j]) % mod;
         }
       }
@@ -21,9 +20,8 @@ struct matrix {
     return res;
   }
 
-  matrix pow(matrix &a, long long x) {
-    matrix res;
-    res.init(n);
+  matrix<n> pow(matrix<n> &a, long long x) {
+    matrix<n> res;
     for (int i = 0; i < n; i++) res.v[i][i] = 1;
 
     while (x) {
@@ -36,4 +34,4 @@ struct matrix {
     return res;
   }  
   #pragma message("be careful with mod in matrix")
-} base;
+};

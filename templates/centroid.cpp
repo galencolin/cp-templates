@@ -34,7 +34,9 @@ struct centroid {
   int find_centroid(int v, int p, int n) {
     for (int x: edges[v]) {
       if (x != p) {
-        if (!vis[x] && sz[x] > n / 2) return find_centroid(x, v, n);
+        if (!vis[x] && sz[x] > n / 2) {
+          return find_centroid(x, v, n);
+        }
       }
     }
 
@@ -45,11 +47,13 @@ struct centroid {
     find_size(v);
 
     int c = find_centroid(v, -1, sz[v]);
-    vis[c] = 1;
+    vis[c] = true;
     par[c] = p;
 
     for (int x: edges[c]) {
-      if (!vis[x]) init_centroid(x, c);
+      if (!vis[x]) {
+        init_centroid(x, c);
+      }
     }
   }
 };

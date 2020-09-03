@@ -28,4 +28,3 @@ namespace modop {
 }
 
 using namespace modop;
-

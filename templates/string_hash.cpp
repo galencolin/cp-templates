@@ -30,12 +30,11 @@ struct string_hash {
   vector<ll> prefix;
   vector<ll> invs;
   
-  #pragma message("vector sizes in init need to be huge")
-  void init(int n, string s, ll k = 89, ll m = 1000000007, int maxn = 1000005) {
+  void init(int n, string s, ll k = 89, ll m = 1000000007) {
     mod = m;
     poly = k;
-    prefix = vector<ll>(maxn);
-    invs = vector<ll>(maxn);
+    prefix = vector<ll>(n);
+    invs = vector<ll>(n);
 
     invs[0] = 1;
     inv = minv(k);
@@ -47,7 +46,7 @@ struct string_hash {
     prefix[0] = (s[0] - '0' + 1);
     for (int i = 1; i < n; i++) {
       x = (x * k) % mod;
-      prefix[i] = (prefix[i - 1] + (x * (s[i] - '0' + 1)) % mod) % mod;
+      prefix[i] = (prefix[i - 1] + x * (s[i] - '0' + 1)) % mod;
     }
 
     len = n;
@@ -55,26 +54,22 @@ struct string_hash {
 
   void extend(string next) {
     int x = next.length();
-    for (int i = len; i < len + x; i++) {
-      invs[i] = (invs[i - 1] * inv) % mod;
+    for (int i = 0; i < x; i++) {
+      invs.push_back((invs[i - 1] * inv) % mod);
     }
 
     ll p = mpow(poly, len - 1);
-    for (int i = len; i < len + x; i++) {
+    for (int i = 0; i < x; i++) {
       p = (p * poly) % mod;
-      prefix[i] = (prefix[i - 1] + (p * (next[i - len] - '0' + 1)) % mod) % mod;
+      prefix.push_back((prefix[i - 1] + p * (next[i - len] - '0' + 1)) % mod);
     }
 
     len += x;
   }
 
   ll get_hash(int left, int right) {
-    if (left < 0 || right >= len) {
-      cout << "error: invalid get_hash bounds " << left << " " << right << " (len = " << len << ")" << endl;
-      exit(1);
-    }
     if (left == 0) return prefix[right];
-    return (((prefix[right] - prefix[left - 1] + mod) % mod) * invs[left]) % mod;
+    return ((prefix[right] - prefix[left - 1] + mod) * invs[left]) % mod;
   }
 
   ll mpow(ll base, ll exp) {

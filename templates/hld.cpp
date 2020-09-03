@@ -1,162 +1,265 @@
-/* HLD author (this code is modified, but basic stuff is based off this): https://codeforces.com/profile/Vladyslav, code at http://ideone.com/Kquery3Kj 
-chaining implementation != fun
-
-somehow this is way slower than their implementation
-
-_version 3 */
-
-/* So how do you use this? 
-  First find the operation you need to use
-    Change the function OP to fit that
-    Change the variable SENTINEL to be a default value for OP
-  READ in the number of vertices to n
-
-  CALL init_graph(n) to set up vectors
-
-  READ in the edges, for each edge CALL edge(u, v)
-
-  After the tree is set up, CALL init_hld() to set up the edges, paths, numbering, and segment tree stuff
-
-  READ in the initial values of each node (input may vary) into a vector, vals
-
-  CALL init_values(vals) to set up node values
-
-  The graph is now set up!
-
-  For modifications, CALL modify(node, value)
-
-  For queries, CALL path(u, v)
-*/
+template<int size, int lg = 25, typename seg_t = long long>
 struct hld {
-  using num_t = ll;
-  int vert, all, cnt = 1;
-  vector<int> heavy, size, p, chain, num, csz, top, depth;
-  vector<vector<int>> edges;
-  vector<num_t> tree, comp;
+  vector<int> edges[size];
+  int bigchild[size];
+  int sz[size];
+  int depth[size];
+  int chain[size];
+  int label[size], label_time;
+  int par[size];
 
-  /* change this problem by problem */
+  int lca_lift[size][lg];
 
-  const num_t SENTINEL = 0;
+  seg_t seg_tree[4 * size];
+  seg_t seg_lazy[4 * size];
 
-  inline num_t OP(num_t x, num_t y) {
-    return x ^ y;
+  int N;
+
+  /* ----------- segment tree ----------- */ 
+
+  /* CHANGE THIS SECTION BY PROBLEM */
+  inline seg_t seg_combine(seg_t a, seg_t b) {
+    return a ^ b;
   }
 
-  /* end changeable section */
-
-  void init_graph(int nodes) {
-    vert = nodes;
-    edges = vector<vector<int>>(vert);
-    heavy = vector<int>(vert, -1);
-    size = vector<int>(vert);
-    p = vector<int>(vert);
-    chain = vector<int>(vert);
-    num = vector<int>(vert);
-    csz = vector<int>(vert);
-    top = vector<int>(vert);
-    depth = vector<int>(vert);
-    tree = vector<num_t>(4 * vert);
-    comp = vector<num_t>(4 * vert);
+  inline seg_t seg_lazy_apply(seg_t lazy_val, seg_t new_val) {
+    return new_val;
   }
 
-  /* edges are 0-indexed */
-  void edge(int a, int b) {
-    edges[a].push_back(b);
-    edges[b].push_back(a);
+  inline seg_t seg_lazy_func(seg_t cur_val, seg_t lazy_val, int l, int r) {
+    return lazy_val;
   }
 
-  void init_hld() {
-    dfs(0);
-    decomp(0);
+  const seg_t seg_sentinel = 0;
+  const seg_t seg_lazy_sentinel = -1;
+  const seg_t seg_init_val = 0;
+  /* END SECTION */
+
+  seg_t seg_query_header(int l, int r) {
+    return seg_query_rec(0, 0, N - 1, l, r);
   }
 
-  void init_values(const vector<num_t>& vals) {
-    /* assume vals.size() = vert */
-    for (int i = 0; i < vert; i++) {
-      modify(i, vals[i]);
+  seg_t seg_query_rec(int i, int tl, int tr, int ql, int qr) {
+    seg_eval_lazy(i, tl, tr);
+    
+    if (ql <= tl && tr <= qr) return seg_tree[i];
+    if (tl > tr || tr < ql || qr < tl) return seg_sentinel;
+
+    int mid = (tl + tr) / 2;
+    seg_t a = seg_query_rec(2 * i + 1, tl, mid, ql, qr);
+    seg_t b = seg_query_rec(2 * i + 2, mid + 1, tr, ql, qr);
+    return seg_combine(a, b);
+  }
+
+  void seg_update_header(int l, int r, seg_t v) {
+    seg_update_rec(0, 0, N - 1, l, r, v);
+  }
+
+  seg_t seg_update_rec(int i, int tl, int tr, int ql, int qr, seg_t v) {
+    seg_eval_lazy(i, tl, tr);
+	
+	if (tl > tr || tr < ql || qr < tl) return seg_tree[i];
+    if (ql <= tl && tr <= qr) {
+      seg_lazy[i] = seg_lazy_apply(seg_lazy[i], v);
+      seg_eval_lazy(i, tl, tr);
+      return seg_tree[i];
     }
-  }  
-  /* basic segment tree stuff */
-  void upd(int v, int tl, int tr, int pos, int d){
-    if (tl == tr){
-      tree[v] = d;
-      return;
-    }
-    int tm = (tl + tr) >> 1;
-    if (pos <= tm) upd(v + v, tl, tm, pos, d); else
-      upd(v + v + 1, tm + 1, tr, pos, d);
-    tree[v] = OP(tree[v + v], tree[v + v + 1]);
+    if (tl == tr) return seg_tree[i];
+
+    int mid = (tl + tr) / 2;
+    seg_t a = seg_update_rec(2 * i + 1, tl, mid, ql, qr, v);
+    seg_t b = seg_update_rec(2 * i + 2, mid + 1, tr, ql, qr, v);
+    return seg_tree[i] = seg_combine(a, b);
   }
-  
-  num_t query(int v, int tl, int tr, int l, int r){
-    if (l > tr || r < tl){
-      return SENTINEL;
+
+  void seg_eval_lazy(int i, int l, int r) {
+    if (seg_lazy[i] == seg_lazy_sentinel) return;
+
+    seg_tree[i] = seg_lazy_func(seg_tree[i], seg_lazy[i], l, r);
+
+    if (l != r) {
+      seg_lazy[i * 2 + 1] = seg_lazy_apply(seg_lazy[i * 2 + 1], seg_lazy[i]);
+      seg_lazy[i * 2 + 2] = seg_lazy_apply(seg_lazy[i * 2 + 2], seg_lazy[i]);
     }
-    if (l <= tl && r >= tr){
-      return tree[v];
-    }
-    int tm = (tl + tr) >> 1;
-    return OP(query(v + v, tl, tm, l, r), query(v + v + 1, tm + 1, tr, l, r));
+
+    seg_lazy[i] = seg_lazy_sentinel;
   }
-  /* end segtree part */
-  
-  void dfs(int v, int parent = 0){
-    p[v] = parent;
-    size[v] = 1;
-    for (int i = 0; i < edges[v].size(); i++) {
-      int to = edges[v][i];
-      if (to == parent){
-        continue;
+
+  /* ----------- init phase 1 ----------- */
+  /* initialize segtree, clear edges, etc. */
+
+  void init_arrays(int n) {
+    // everything not initialized doesn't need to be
+    N = n;
+    for (int i = 0; i < N; i++) {
+      edges[i].clear();
+      chain[i] = i;
+    }
+
+    for (int i = 0; i < 4 * N; i++) {
+      seg_tree[i] = seg_init_val;
+      seg_lazy[i] = seg_lazy_sentinel;
+    }
+  }
+
+  /* ----------- init phase 2 ----------- */
+  /* put edges in */
+
+  void add_edge(int u, int v) {
+    edges[u].push_back(v);
+    edges[v].push_back(u);
+  }
+
+  /* ----------- init phase 3 ----------- */
+  /* build the lca and hld stuff */
+
+  void init_tree(seg_t* arr, int root = 0) {
+    // lca
+    lca_dfs(root, -1);
+
+    // size, compute biggest children
+    dfs_size(root, -1, 0);
+
+    // compute chains
+    dfs_chains(root, -1);
+
+    // label nodes
+    label_time = 0;
+    dfs_labels(arr, root, -1);
+  }
+
+  void lca_dfs(int v, int par) {
+    lca_lift[v][0] = par;
+
+    for (int i = 1; i < lg; i++) {
+      if (lca_lift[v][i - 1] == -1) lca_lift[v][i] = -1;
+      else lca_lift[v][i] = lca_lift[lca_lift[v][i - 1]][i - 1];
+    }
+
+    for (int x: edges[v]) {
+      if (x != par) {
+        lca_dfs(x, v);
       }
-      depth[to] = depth[v] + 1;
-      dfs(to, v);
-      size[v] += size[to];
-      if (heavy[v] == -1 || size[to] > size[heavy[v]]){
-        heavy[v] = to;
+    }
+  }
+
+  void dfs_size(int v, int p, int d) {
+    sz[v] = 1;
+    depth[v] = d;
+    par[v] = p;
+    int bigc = -1, bigv = -1;
+
+    for (int x: edges[v]) {
+      if (x != p) {
+        dfs_size(x, v, d + 1);
+        sz[v] += sz[x];
+        if (sz[x] > bigv) {
+          bigc = x;
+          bigv = sz[x];
+        }
+      }
+    }
+
+    bigchild[v] = bigc;
+  }
+
+  void dfs_chains(int v, int p) {
+    if (bigchild[v] != -1) {
+      chain[bigchild[v]] = chain[v];
+    }
+
+    for (int x: edges[v]) {
+      if (x != p) {
+        dfs_chains(x, v);
       }
     }
   }
-  
-  void decomp(int v, int parent = -1){
-    chain[v] = cnt - 1;
-    num[v] = all++;
-    if (!csz[cnt - 1]){
-      top[cnt - 1] = v;
+
+  void dfs_labels(seg_t* arr, int v, int p) {
+    label[v] = label_time++;
+    seg_update_header(label[v], label[v], arr[v]);
+
+    if (bigchild[v] != -1) {
+      dfs_labels(arr, bigchild[v], v);
     }
-    ++csz[cnt - 1];
-    if (heavy[v] != -1){
-      decomp(heavy[v], v);
-    }
-    for (int i = 0; i < edges[v].size(); i++) {
-      int to = edges[v][i];
-      if (to == parent || to == heavy[v]){
-        continue;
+
+    for (int x: edges[v]) {
+      if (x != p && x != bigchild[v]) {
+        dfs_labels(arr, x, v);
       }
-      ++cnt;
-      decomp(to, v);
     }
   }
-  
-  num_t path(int a, int b){
-    num_t res = SENTINEL;
-    while (chain[a] != chain[b]){
-      if (depth[top[chain[a]]] < depth[top[chain[b]]]) swap(a, b);
-      int start = top[chain[a]];
-      if (num[a] == num[start] + csz[chain[a]] - 1)
-        res = OP(res, comp[chain[a]]);
-      else
-        res = OP(res, query(1, 0, vert - 1, num[start], num[a]));
-      a = p[start];
+
+  /* ----------- init phase 4 ----------- */
+  /* usage */
+
+  int lca(int a, int b) {
+    if (depth[a] < depth[b]) swap(a, b);
+    int d = depth[a] - depth[b];
+    int v = get_kth_ancestor(a, d);
+    if (v == b) {
+      return v;
+    } else {
+      for (int i = lg - 1; i >= 0; i--) {
+        if (lca_lift[v][i] != lca_lift[b][i]) {
+          v = lca_lift[v][i];
+          b = lca_lift[b][i];
+        }
+      }
+      return lca_lift[b][0];
     }
-    if (depth[a] > depth[b]) swap(a, b);
-    res = OP(res, query(1, 0, vert - 1, num[a], num[b]));
-    return res;
   }
-  
-  void modify(int edge, int v){
-    upd(1, 0, vert - 1, num[edge], v);
-    int start = num[top[chain[edge]]];
-    int end = start + csz[chain[edge]] - 1;
-    comp[chain[edge]] = query(1, 0, vert - 1, start, end);
+
+  int get_kth_ancestor(int v, int k) {
+    for (int i = lg - 1; i >= 0; i--) {
+	    if (v == -1) return v;
+      if ((1 << i) <= k) {
+        v = lca_lift[v][i];
+        k -= (1 << i);
+      }
+    }
+    return v;
+  }
+
+  /* excludes p */
+  seg_t query_chain(int v, int p) {
+    seg_t val = seg_sentinel;
+    while (depth[p] < depth[v]) {
+      int top = chain[v];
+      if (depth[top] <= depth[p]) {
+        int diff = depth[v] - depth[p];
+        top = get_kth_ancestor(v, diff - 1);
+      }
+      val = seg_combine(val, seg_query_header(label[top], label[v]));
+      v = par[top];
+    }
+    return val;
+  }
+
+  seg_t query(int u, int v) {
+    int lc = lca(u, v);
+    seg_t val = seg_combine(query_chain(u, lc), query_chain(v, lc));
+    val = seg_combine(val, seg_query_header(label[lc], label[lc]));
+    return val;
+  }
+
+  /* excludes p */
+  void update_chain(int v, int p, seg_t val) {
+    while (depth[p] < depth[v]) {
+      int top = chain[v];
+      if (depth[top] <= depth[p]) {
+        int diff = depth[v] - depth[p];
+        top = get_kth_ancestor(v, diff - 1);
+      }
+      seg_update_header(label[top], label[v], val);
+      v = par[top];
+    }
+  }
+
+  void update(int u, int v, seg_t val) {
+    int lc = lca(u, v);
+    update_chain(u, lc, val); 
+    update_chain(v, lc, val);
+    seg_update_header(label[lc], label[lc], val);
   }
 };

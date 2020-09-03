@@ -9,7 +9,7 @@ struct sum_t {
     return sum_t(val + other.val);
   }
   
-  sum_t lazy_op(sum_t v, int size) {
+  sum_t lazy_op(sum_t& v, int size) {
     return sum_t(val + v.val * size);
   }
 };

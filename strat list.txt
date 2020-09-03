@@ -57,6 +57,7 @@ graphs:
 	small to large
 	centroid decomposition
 	flattening to an array magic
+	euler tour/cycle/walk
 query problems:
 	segment trees (++implicit)
 	***sqrt decomposition (for more than just range)
@@ -82,7 +83,7 @@ strings:
 	hashing (be careful with TL)
 	eventually figure out suffix trees
 geometry:
-	lots of triangles trick (break a triangle into segments, reduce to n^d + n^3
+	lots of triangles trick (break a triangle into segments, reduce to n^d + n^3)
 number theory:
 	bitset or segmented sieve
 	goldbach conjecture

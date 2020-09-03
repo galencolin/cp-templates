@@ -8,19 +8,19 @@ using ordered_set = tree<num_t, null_type, less<num_t>, rb_tree_tag, tree_order_
 template <typename num_t>
 struct ordered_multiset {
 	ordered_set<pair<num_t, int> > vals;
-	set<pair<int, int> > best; /* start at -1 */
+	set<pair<num_t, int> > best; /* start at -1 */
 	
 	/* helper, find the lowest value that represents the element */
-	int findbest (int val) {
+	int findbest(num_t val) {
 		return (*best.upper_bound(make_pair(val - 1, 0))).second;
 	}
 	
 	/* is element in set */
-	bool contains(int val) {
+	bool contains(num_t val) {
 		return vals.find(make_pair(val, -1)) != vals.end();
 	}
 	
-	void insert(int val) {
+	void insert(num_t val) {
 		if (contains(val)) { /* already in, update lowest value and insert a new one */
 			int loc = findbest(val);
 			best.erase(make_pair(val, loc));
@@ -32,9 +32,9 @@ struct ordered_multiset {
 		}
 	}
 	
-	void erase(int val) { /* erases one */
+	void erase(num_t val) { /* erases one */
 		if (!contains(val)) return; /* not in */
-		int loc = findbest(val);
+		num_t loc = findbest(val);
 		
 		/* remove the element and its best */
 		best.erase(make_pair(val, loc));
@@ -43,17 +43,17 @@ struct ordered_multiset {
 	}
 	
 	/* unmodified functions */
-	int find_by_order(int k) { return (*vals.find_by_order(k)).first; }
-	int order_of_key(int k) { return vals.order_of_key(make_pair(k - 1, 0)); }
-	pair<int, int>* begin() { return vals.begin(); }
-	pair<int, int>* end() { return vals.end(); }
-	pair<int, int>* rbegin() { return vals.rbegin(); }
-	pair<int, int>* rend() { return vals.rend(); }
+	num_t find_by_order(int k) { return (*vals.find_by_order(k)).first; }
+	int order_of_key(num_t k) { return vals.order_of_key(make_pair(k - 1, 0)); }
+	pair<num_t, int>* begin() { return vals.begin(); }
+	pair<num_t, int>* end() { return vals.end(); }
+	pair<num_t, int>* rbegin() { return vals.rbegin(); }
+	pair<num_t, int>* rend() { return vals.rend(); }
 	int size() { return vals.size(); }
 	void clear() { vals.clear(); best.clear(); }
-	int count(int k) { return vals.order_of_key(k + 1) - vals.order_of_key(k); }
-	pair<int, int>* lower_bound(int k) { return vals.lower_bound(make_pair(k - 1, 0)); }
-	pair<int, int>* upper_bound(int k) { return vals.upper_bound(make_pair(k, 0)); }
+	int count(num_t k) { return vals.order_of_key(k + 1) - vals.order_of_key(k); }
+	pair<num_t, int>* lower_bound(num_t k) { return vals.lower_bound(make_pair(k - 1, 0)); }
+	pair<num_t, int>* upper_bound(num_t k) { return vals.upper_bound(make_pair(k, 0)); }
 };
 
 /* ------------------------------------------------------------------------ COMMENTS ------------------------------------------------------------------------ */

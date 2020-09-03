@@ -9,7 +9,7 @@ struct min_t {
     return min_t(min(val, other.val));
   }
   
-  min_t lazy_op(min_t v, int size) {
+  min_t lazy_op(min_t& v, int size) {
     return min_t(val + v.val);
   }
 };
