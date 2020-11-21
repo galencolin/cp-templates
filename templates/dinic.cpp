@@ -8,10 +8,10 @@ template<int SZ> struct Dinic {
 	void ae(int u, int v, F cap, F rcap = 0) { 
 		assert(min(cap,rcap) >= 0); 
 		Edge a{v,sz(adj[v]),0,cap}, b{u,sz(adj[u]),0,rcap};
-		adj[u].pb(a), adj[v].pb(b); } 
+		adj[u].push_back(a), adj[v].push_back(b); } 
 	int lev[SZ]; typename vector<Edge>::iterator cur[SZ]; 
 	bool bfs() {
-		f0r(i,N) lev[i] = -1, cur[i] = begin(adj[i]);
+		for (ll i = 0; i < N; i++) lev[i] = -1, cur[i] = begin(adj[i]);
 		queue<int> q({s}); lev[s] = 0; 
 		while (sz(q)) {
 			int u = q.front(); q.pop();

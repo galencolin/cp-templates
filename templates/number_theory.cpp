@@ -19,7 +19,7 @@ namespace number_theory {
 	 
 	bool prime[15000105]; 
 	void sieve(int n) { 
-	  f0r(i, n + 1) prime[i] = 1;
+	  for (ll i = 0; i <= n; i++) prime[i] = 1;
 	  for (ll p = 2; p * p <= n; p++) { 
 		if (prime[p] == true) { 
 		  for (ll i = p * p; i <= n; i += p) 
@@ -29,43 +29,43 @@ namespace number_theory {
 	  prime[1] = prime[0] = 0;
 	} 
 	 
-	vl primelist;
+	vector<ll> primelist;
 	bool __primes_generated__ = 0;
 	 
 	void genprimes(int n) {
 	  __primes_generated__ = 1;
 	  sieve(n + 1);
-	  f1r(i, 2, n + 1) if (prime[i]) primelist.pb(i);
+	  for (ll i = 2; i <= n; i++) if (prime[i]) primelist.pb(i);
 	}
 	 
-	vl factors(ll n) {
+	vector<ll> factors(ll n) {
 	  if (!__primes_generated__) {
 		cerr << "Call genprimes you dope" << endl;
 		exit(1);
 	  }
-	  vl facs;
+	  vector<ll> facs;
 	 
 	  for (ll i = 0; primelist[i] * primelist[i] <= n && i < primelist.size(); i++) {
 		if (n % primelist[i] == 0) {
 		  while (n % primelist[i] == 0) {
 			n /= primelist[i];
-			facs.pb(primelist[i]);
+			facs.push_back(primelist[i]);
 		  }
 		}
 	  }
 	  if (n > 1) {
-		facs.pb(n);
+		facs.push_back(n);
 	  }
-	  sort(all(facs));
+	  sort(facs.begin(), facs.end());
 	  return facs;
 	}
 	
-	vl getdivs(ll n) {
-    vl divs;
+	vector<ll> getdivs(ll n) {
+    vector<ll> divs;
     for (ll i = 1; i * i <= n; i++) {
       if (n % i == 0) {
-        divs.pb(i);
-        divs.pb(n / i);
+        divs.push_back(i);
+        divs.push_back(n / i);
       }
     }
 
