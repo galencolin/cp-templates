@@ -8,13 +8,32 @@ struct matrix {
     memset(v, 0, sizeof(v));
   }
 
+  // matrix<n> mul(matrix &b) {
+    // matrix<n> res;
+    // for (int i = 0; i < n; i++) {
+      // for (int k = 0; k < n; k++) {
+        // for (int j = 0; j < n; j++) {
+          // res.v[i][j] = (res.v[i][j] + v[i][k] * b.v[k][j]) % mod;
+        // }
+      // }
+    // }
+    // return res;
+  // }
+  
   matrix<n> mul(matrix &b) {
     matrix<n> res;
+	static const ll msq = mod * mod;
     for (int i = 0; i < n; i++) {
       for (int k = 0; k < n; k++) {
         for (int j = 0; j < n; j++) {
-          res.v[i][j] = (res.v[i][j] + v[i][k] * b.v[k][j]) % mod;
+          res.v[i][j] += v[i][k] * b.v[k][j];
+		  if (res.v[i][j] >= msq) res.v[i][j] -= msq;
         }
+      }
+    }
+	for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        res.v[i][j] %= mod;
       }
     }
     return res;
@@ -32,6 +51,18 @@ struct matrix {
       a = a.mul(a);
     }
     return res;
-  }  
+  } 
+  
+  void pr() {
+	  cout << "------------\n";
+	  for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+		  cout << v[i][j] << " ";
+		}
+		cout << '\n';
+	  }
+	  cout << "------------\n";
+  }
+  
   #pragma message("be careful with mod in matrix")
 };

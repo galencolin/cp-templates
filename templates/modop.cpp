@@ -25,6 +25,24 @@ namespace modop {
 	ll mdiv(ll a, ll b) {
 	  return mmul(a, minv(b));
 	}
+	
+	const ll FACTORIAL_SIZE = 1.1e6;
+	ll fact[FACTORIAL_SIZE], ifact[FACTORIAL_SIZE];
+	void gen_factorial(ll n) {
+		fact[0] = fact[1] = ifact[0] = ifact[1] = 1;
+		
+		for (ll i = 2; i <= n; i++) {
+			fact[i] = (i * fact[i - 1]) % mod;
+		}
+		ifact[n] = minv(fact[n]);
+		for (ll i = n - 1; i >= 2; i--) {
+			ifact[i] = ((i + 1) * ifact[i + 1]) % mod;
+		}
+	}
+	ll nck(ll n, ll k) {
+		ll den = (ifact[k] * ifact[n - k]) % mod;
+		return (den * fact[n]) % mod;
+	}
 }
 
 using namespace modop;

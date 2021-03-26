@@ -35,7 +35,7 @@ namespace number_theory {
 	void genprimes(int n) {
 	  __primes_generated__ = 1;
 	  sieve(n + 1);
-	  for (ll i = 2; i <= n; i++) if (prime[i]) primelist.pb(i);
+	  for (ll i = 2; i <= n; i++) if (prime[i]) primelist.push_back(i);
 	}
 	 
 	vector<ll> factors(ll n) {

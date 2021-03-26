@@ -4,11 +4,11 @@ ll kk[10] = {
   189,
   94,
   621,
-  (ll)rng() % 1000 + 101,
-  (ll)rng() % 2000 + 121,
-  (ll)rng() % 4000 + 141,
-  (ll)rng() % 8000 + 161,
-  (ll)rng() % 16000 + 183
+  (ll)rng() % 1000 + 1051,
+  (ll)rng() % 2000 + 2761,
+  (ll)rng() % 4000 + 4441,
+  (ll)rng() % 8000 + 8111,
+  (ll)rng() % 16000 + 18883
 };
 
 ll primes[10] = {
@@ -55,16 +55,25 @@ struct string_hash {
   void extend(string next) {
     int x = next.length();
     for (int i = 0; i < x; i++) {
-      invs.push_back((invs[i - 1] * inv) % mod);
+      invs.push_back((invs[i + len - 1] * inv) % mod);
     }
 
     ll p = mpow(poly, len - 1);
     for (int i = 0; i < x; i++) {
       p = (p * poly) % mod;
-      prefix.push_back((prefix[i - 1] + p * (next[i - len] - '0' + 1)) % mod);
+      prefix.push_back((prefix[i + len - 1] + p * (next[i] - '0' + 1)) % mod);
     }
 
     len += x;
+  }
+  
+  void kill(int sz) { // remove last [sz] characters
+	  for (int i = 0; i < sz; i++) {
+		  invs.pop_back();
+		  prefix.pop_back();
+	  }
+	  
+	  len -= sz;
   }
 
   ll get_hash(int left, int right) {
@@ -96,6 +105,18 @@ struct multihash {
     for (int i = 0; i < K; i++) {
       sh[i].init(n, s, kk[9 - i], primes[9 - i]);
     }
+  }
+  
+  void extend(string s) {
+	  for (int i = 0; i < K; i++) {
+		sh[i].extend(s);
+	  }
+  }
+  
+  void kill(int x) {
+	  for (int i = 0; i < K; i++) {
+		sh[i].kill(x);
+	  }
   }
 
   vector<ll> get_hash(int l, int r) {
