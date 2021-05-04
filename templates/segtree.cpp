@@ -27,15 +27,13 @@ struct segtree {
   num_t update(int i, int tl, int tr, int ql, int qr, num_t v) {
     eval_lazy(i, tl, tr);
 	
-	if (tl > tr || tr < ql || qr < tl) return tree[i];
+	if (tr < ql || qr < tl) return tree[i];
     if (ql <= tl && tr <= qr) {
       lazy[i] = lazy[i].val + v.val;
       eval_lazy(i, tl, tr);
       return tree[i];
     }
     
-    if (tl == tr) return tree[i];
-
     int mid = (tl + tr) / 2;
     num_t a = update(2 * i + 1, tl, mid, ql, qr, v),
           b = update(2 * i + 2, mid + 1, tr, ql, qr, v);
@@ -51,7 +49,7 @@ struct segtree {
     eval_lazy(i, tl, tr);
     
     if (ql <= tl && tr <= qr) return tree[i];
-    if (tl > tr || tr < ql || qr < tl) return num_t::null_v;
+    if (tr < ql || qr < tl) return num_t::null_v;
 
     int mid = (tl + tr) / 2;
     num_t a = query(2 * i + 1, tl, mid, ql, qr),

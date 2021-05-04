@@ -27,7 +27,7 @@ struct matrix {
       for (int k = 0; k < n; k++) {
         for (int j = 0; j < n; j++) {
           res.v[i][j] += v[i][k] * b.v[k][j];
-		  if (res.v[i][j] >= msq) res.v[i][j] -= msq;
+		  res.v[i][j] = (res.v[i][j] >= msq ? res.v[i][j] - msq : res.v[i][j]);
         }
       }
     }

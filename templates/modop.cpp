@@ -28,7 +28,9 @@ namespace modop {
 	
 	const ll FACTORIAL_SIZE = 1.1e6;
 	ll fact[FACTORIAL_SIZE], ifact[FACTORIAL_SIZE];
+	bool __factorials_generated__ = 0;
 	void gen_factorial(ll n) {
+		__factorials_generated__ = 1;
 		fact[0] = fact[1] = ifact[0] = ifact[1] = 1;
 		
 		for (ll i = 2; i <= n; i++) {
@@ -40,6 +42,10 @@ namespace modop {
 		}
 	}
 	ll nck(ll n, ll k) {
+		if (!__factorials_generated__) {
+			cerr << "Call gen_factorial you dope" << endl;
+			exit(1);
+		}
 		ll den = (ifact[k] * ifact[n - k]) % mod;
 		return (den * fact[n]) % mod;
 	}

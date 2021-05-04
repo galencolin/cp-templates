@@ -14,8 +14,8 @@ struct centroid {
   }
 
   void edge(int a, int b) {
-    edges[a].pb(b);
-    edges[b].pb(a);
+    edges[a].push_back(b);
+    edges[b].push_back(a);
   }
 
   int find_size(int v, int p = -1) {
