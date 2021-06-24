@@ -46,6 +46,7 @@ namespace modop {
 			cerr << "Call gen_factorial you dope" << endl;
 			exit(1);
 		}
+		if (k < 0 || n < k) return 0;
 		ll den = (ifact[k] * ifact[n - k]) % mod;
 		return (den * fact[n]) % mod;
 	}

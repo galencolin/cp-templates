@@ -43,7 +43,7 @@ struct convex_hull {
     hull_down.push_back(p1);
 
     int sz = (int)points.size();
-    for (int i = 1; i < sz; i++) {
+    for (int i = 1; i < sz; i++) { // for including collinear points on hull, invert the four -1/1's (but not in size()); https://cses.fi/paste/bf929923a2560c1f202a29/
       /* end or clockwise */
       if (i == points.size() - 1 || orient(p1, points[i], p2) == -1) {
         /* while not cw */
