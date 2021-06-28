@@ -1,5 +1,8 @@
+#include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp> 
-#include <ext/pb_ds/tree_policy.hpp> 
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
 using namespace __gnu_pbds; 
 
 template <typename num_t>
@@ -45,23 +48,64 @@ struct ordered_multiset {
 	/* unmodified functions */
 	num_t find_by_order(int k) { return (*vals.find_by_order(k)).first; }
 	int order_of_key(num_t k) { return vals.order_of_key(make_pair(k - 1, 0)); }
-	pair<num_t, int>* begin() { return vals.begin(); }
-	pair<num_t, int>* end() { return vals.end(); }
-	pair<num_t, int>* rbegin() { return vals.rbegin(); }
-	pair<num_t, int>* rend() { return vals.rend(); }
+	auto begin() { return vals.begin(); }
+	auto end() { return vals.end(); }
+	auto rbegin() { return vals.rbegin(); }
+	auto rend() { return vals.rend(); }
 	int size() { return vals.size(); }
 	void clear() { vals.clear(); best.clear(); }
-	int count(num_t k) { return vals.order_of_key(k + 1) - vals.order_of_key(k); }
-	pair<num_t, int>* lower_bound(num_t k) { return vals.lower_bound(make_pair(k - 1, 0)); }
-	pair<num_t, int>* upper_bound(num_t k) { return vals.upper_bound(make_pair(k, 0)); }
+	int count(num_t k) { return vals.order_of_key({k, 0}) - vals.order_of_key({k - 1, 0}); }
+	auto lower_bound(num_t k) { return vals.lower_bound(make_pair(k - 1, 0)); }
+	auto upper_bound(num_t k) { return vals.upper_bound(make_pair(k, 0)); }
 };
+
+int main()
+{
+	/*ordered_set<long long> os;
+	os.insert(5);
+	os.insert(23);
+	os.insert(24);
+	os.insert(25);
+	os.insert(39);
+	for(auto x:os)
+	{
+		cout<<x<<" ";
+	}
+	cout<<endl;*/
+
+	ordered_multiset<long long> oms;
+	// 5 23 23 24 24 24 25 39 39 100
+	oms.insert(5);
+	oms.insert(23);
+	oms.insert(23);
+	oms.insert(24);
+	oms.insert(24);
+	oms.insert(24);
+	oms.insert(25);
+	oms.insert(39);
+	oms.insert(39);
+	oms.insert(100);
+
+	for(auto m:oms) // iterate over ordered multiset
+	{
+		cout<<m.first<<" ";
+	}
+	cout<<endl;
+	cout<<oms.find_by_order(2)<<endl;
+	cout<<oms.order_of_key(26)<<endl;
+	cout<<oms.count(24)<<endl;
+	cout<<oms.lower_bound(24)->first<<endl; // use in this way
+	cout<<oms.upper_bound(23)->first<<endl;
+
+	return 0;
+}
 
 /* ------------------------------------------------------------------------ COMMENTS ------------------------------------------------------------------------ */
 /* supports things like k-th smallest element and find index of element in set */
 /* all in pretty good O(lgn) */
 
 /* example usage */
-ordered_set<int> os;
+//ordered_set<int> os;
 
 /* extra functions (in addition to std::set operations):
 	find_by_order(k) - returns a pointer to the k-th smallest element in the set (zero-indexed)
