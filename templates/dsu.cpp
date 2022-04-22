@@ -1,12 +1,13 @@
 /* union by size */
 struct dsu {
   int n;
-  vector<int> sizes, marks;
+  vector<int> sizes, marks, nedges;
   vector<vector<int> > graph;
 
   void init(int rn) {
     n = rn;
     sizes = vector<int>(n);
+    nedges = vector<int>(n);
     fill(sizes.begin(), sizes.end(), 1);
     marks = vector<int>(n);
     for (int i = 0; i < n; i++) marks[i] = i;
@@ -22,7 +23,10 @@ struct dsu {
   }
 
   void merge(int a, int b) {
-    if (marks[a] == marks[b]) return;
+    if (marks[a] == marks[b]) {
+        nedges[marks[b]] ++;
+        return;
+    }
     graph[a].push_back(b);
     graph[b].push_back(a);
 
@@ -30,6 +34,8 @@ struct dsu {
 
     sizes[marks[b]] += sizes[marks[a]];
     sizes[marks[a]] = 0;
+    nedges[marks[b]] += (nedges[marks[a]] + 1);
+    nedges[a] = 0;
     mark(marks[b], a);
   }
 
