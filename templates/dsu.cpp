@@ -35,7 +35,7 @@ struct dsu {
     sizes[marks[b]] += sizes[marks[a]];
     sizes[marks[a]] = 0;
     nedges[marks[b]] += (nedges[marks[a]] + 1);
-    nedges[a] = 0;
+    nedges[marks[a]] = 0;
     mark(marks[b], a);
   }
 
